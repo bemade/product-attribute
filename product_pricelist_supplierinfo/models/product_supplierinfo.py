@@ -19,7 +19,12 @@ class ProductSupplierinfo(models.Model):
         self, no_supplierinfo_discount=False, ignore_margin=False
     ):
         self.ensure_one()
-        sale_price = self.price if no_supplierinfo_discount else self.price_discounted
+        if no_supplierinfo_discount:
+            # price_discounted is already in the product's UoM, price is not
+            product_uom = (self.product_id or self.product_tmpl_id).uom_id
+            sale_price = self.uom_id._compute_price(self.price, product_uom)
+        else:
+            sale_price = self.price_discounted
         if self.sale_margin and not ignore_margin:
             sale_price = (sale_price + (sale_price * (self.sale_margin / 100))) or 0.0
         return sale_price

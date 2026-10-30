@@ -45,7 +45,7 @@ class TestProductSupplierinfo(BaseCommon):
                             "partner_id": cls.supplier1.id,
                             "min_qty": 1,
                             "price": 1200,
-                            "product_uom_id": cls.env.ref("uom.product_uom_dozen").id,
+                            "uom_id": cls.env.ref("uom.product_uom_dozen").id,
                         }
                     ),
                 ],
@@ -57,7 +57,7 @@ class TestProductSupplierinfo(BaseCommon):
                 "item_ids": [
                     Command.create(
                         {
-                            "compute_price": "formula",
+                            "compute_price": "discount",
                             "base": "supplierinfo",
                             "price_discount": 0,
                             "min_quantity": 1.0,
@@ -323,9 +323,8 @@ class TestProductSupplierinfo(BaseCommon):
         # The price with the will be 1200 on the seller (1 Dozen)
         self.assertEqual(product_seller_price, 1200)
         uom_unit = self.env.ref("uom.product_uom_unit")
-        # The price in the SO will always be the one
-        # for the unit of measure of the product
-        self.assertEqual(product_pricelist_price_dozen, 120)
+        # The price is expressed in the requested UoM: 12 units at 120
+        self.assertEqual(product_pricelist_price_dozen, 1440)
 
         # And the price with the pricelist and the uom of Units (Instead of Dozen)
         # will be 100, plus the 20% the total will be 120 per Unit

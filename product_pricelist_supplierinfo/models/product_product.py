@@ -29,20 +29,3 @@ class ProductProduct(models.Model):
         return self.product_tmpl_id._get_supplierinfo_pricelist_price(
             rule, date=date, quantity=quantity, product_id=self.id
         )
-
-    def _price_compute(
-        self, price_type, uom=None, currency=None, company=None, date=False
-    ):
-        """Return dummy not falsy prices when computation is done from supplier
-        info for avoiding error on super method. We will later fill these with
-        correct values.
-        """
-        if price_type == "supplierinfo":
-            return dict.fromkeys(self.ids, 1.0)
-        return super()._price_compute(
-            price_type,
-            uom=uom,
-            currency=currency,
-            company=company,
-            date=date,
-        )
