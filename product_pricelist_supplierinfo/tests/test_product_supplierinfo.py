@@ -13,6 +13,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 @tagged("product_supplier_info")
 class TestProductSupplierinfo(BaseCommon):
+    _test_user_groups = ("base.group_user", "product.group_product_manager")
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

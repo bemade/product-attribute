@@ -35,7 +35,7 @@ class ProductTemplate(models.Model):
         if product:
             if isinstance(date, datetime):
                 date = date.date()
-            seller = product.with_context(
+            seller_info = product.with_context(
                 override_min_qty=rule.no_supplierinfo_min_quantity
             )._select_seller(
                 # For a public user this record could be not accessible, but we
@@ -46,6 +46,7 @@ class ProductTemplate(models.Model):
                 quantity=quantity,
                 date=date,
             )
+            seller = seller_info.get("supplierinfo")
             if seller:
                 price = seller._get_supplierinfo_pricelist_price(
                     rule.no_supplierinfo_discount,
